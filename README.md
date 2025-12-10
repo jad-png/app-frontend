@@ -34,3 +34,47 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+## Project Architecture
+
+```sh
+
+my-personal-project/
+├── app/
+│   ├── layout.tsx            # Root layout (Global providers like AuthProvider)
+│   ├── page.tsx              # Landing page
+│   └── (auth)/               # Auth Routes (Pages)
+│       ├── login/
+│       │   └── page.tsx      # Uses <LoginForm />
+│       └── register/
+│           └── page.tsx      # Uses <RegisterForm />
+│
+├── components/               # Global UI (Atoms)
+│   └── ui/
+│       ├── Button.tsx
+│       ├── Input.tsx
+│       └── Card.tsx
+│
+├── features/
+│   └── auth/                 # The Auth Feature Module
+│       ├── types/
+│       │   └── index.ts      # Interfaces (User, LoginResponse, LoginDTO)
+│       │
+│       ├── api/              # API Layer (Bridge to Nest.js)
+│       │   └── authService.ts # Functions: login(), register(), logout()
+│       │
+│       ├── components/       # Auth-specific UI
+│       │   ├── LoginForm.tsx
+│       │   └── RegisterForm.tsx
+│       │
+│       ├── hooks/            # Logic & State
+│       │   └── useAuth.ts    # Custom hook calling authService
+│       │
+│       └── context/          # Global State
+│           └── AuthContext.tsx
+│
+└── lib/
+    └── axios.ts              # Configured Axios instance (baseURL, interceptors)
+
+```
