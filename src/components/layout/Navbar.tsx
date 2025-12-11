@@ -1,75 +1,121 @@
-"use client";
-import Link from "next/link"
+"use client"
+
+import type React from "react"
 import { useState } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Menu, X } from "lucide-react"
 
 const Navbar: React.FC = () => {
-	const [open, setOpen] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
 
-	return (
-		<header className="bg-[#4D73BE] text-white">
-			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div className="flex items-center justify-between h-16">
-					<div className="flex items-center">
-						<Link href="/" className="flex items-center gap-3">
-							<span className="sr-only">Model App</span>
-							<div className="flex items-center gap-3">
-								<div className="w-10 h-10 bg-white/20 rounded-md flex items-center justify-center">
-									<span className="font-bold text-white">M</span>
-								</div>
-								<span className="font-semibold text-lg">Model App</span>
-							</div>
-						</Link>
-					</div>
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
 
-					<nav className="hidden md:flex items-center space-x-6">
-						<Link href="/" className="hover:underline">Home</Link>
-						<Link href="/models" className="hover:underline">Models</Link>
-						<Link href="/members" className="hover:underline">Members</Link>
-						<Link href="/faq" className="hover:underline">FAQ / Support</Link>
-						<Link href="/contact" className="hover:underline">Contact</Link>
+  const navLinks = [
+    { href: "/", label: "Home" },
+    { href: "/models", label: "Models" },
+    { href: "/members", label: "Members" },
+    { href: "/faq-support", label: "FAQ/Support" },
+    { href: "/contact", label: "Contact" },
+  ]
 
-						<Link
-							href="/join"
-							className="ml-4 inline-block bg-white text-[#4D73BE] px-4 py-2 rounded-md font-semibold"
-						>
-							Join
-						</Link>
-					</nav>
+  const isActiveLink = (href: string): boolean => {
+    if (href === "/") {
+      return pathname === "/"
+    }
+    return pathname.startsWith(href)
+  }
 
-					<div className="md:hidden">
-						<button
-							onClick={() => setOpen(!open)}
-							aria-label="Toggle menu"
-							className="p-2 rounded-md bg-white/10 hover:bg-white/20"
-						>
-							{open ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
-						</button>
-					</div>
-				</div>
-			</div>
+  return (
+    <header className="bg-[#4D73BE] text-white shadow-md">
+      <nav className="max-w-7xl mx-auto px-6">
+        <div className="flex items-center justify-between h-20">
+          <Link href="/" className="text-xl font-extrabold tracking-tight">
+            MODEL APP
+          </Link>
 
-			{open && (
-				<div className="md:hidden border-t border-white/10">
-					<div className="px-4 pt-4 pb-6 space-y-3">
-						<Link href="/" className="block text-white">Home</Link>
-						<Link href="/models" className="block text-white">Models</Link>
-						<Link href="/members" className="block text-white">Members</Link>
-						<Link href="/faq" className="block text-white">FAQ / Support</Link>
-						<Link href="/contact" className="block text-white">Contact</Link>
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map((link) => {
+              const isActive = isActiveLink(link.href)
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`
+                    px-4 py-2 text-sm font-medium text-white 
+                    rounded-full transition-all duration-300
+                    ${isActive ? "bg-white/20" : "hover:bg-white/10"}
+                  `}
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
+            <Link
+              href="/join"
+              className="
+                ml-4 px-6 py-2 text-sm font-bold 
+                bg-white text-[#4D73BE] 
+                rounded-full shadow-sm 
+                transition-transform duration-300
+                hover:scale-105
+              "
+            >
+              Join
+            </Link>
+          </div>
 
-						<Link
-							href="/join"
-							className="block mt-2 bg-white text-[#4D73BE] px-4 py-2 rounded-md font-semibold text-center"
-						>
-							Join
-						</Link>
-					</div>
-				</div>
-			)}
-		</header>
-	)
+          {/* Mobile Menu Button */}
+          <button
+            onClick={toggleMobileMenu}
+            className="md:hidden p-2 rounded-full hover:bg-white/10 transition-all duration-300"
+            aria-label="Toggle mobile menu"
+          >
+            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
+
+        {isMobileMenuOpen && (
+          <div className="md:hidden pb-6 pt-2 space-y-1 animate-in slide-in-from-top duration-300">
+            {navLinks.map((link) => {
+              const isActive = isActiveLink(link.href)
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`
+                    block px-4 py-3 text-sm font-medium text-white 
+                    rounded-full transition-all duration-300
+                    ${isActive ? "bg-white/20" : "hover:bg-white/10"}
+                  `}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
+            <Link
+              href="/join"
+              className="
+                block mx-4 mt-4 px-6 py-3 text-center text-sm font-bold 
+                bg-white text-[#4D73BE] 
+                rounded-full shadow-sm 
+                transition-transform duration-300
+                hover:scale-105
+              "
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Join
+            </Link>
+          </div>
+        )}
+      </nav>
+    </header>
+  )
 }
 
 export default Navbar
-
