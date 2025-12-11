@@ -6,10 +6,10 @@ import Link from "next/link"
 
 const HeroBanner: React.FC = () => {
   return (
-    <section className="relative w-full h-[600px] md:h-[700px] overflow-hidden">
+    <section className="relative w-full md:h-[700px] md:h-[700px] overflow-hidden">
       {/* Background Image */}
       <Image
-        src="https://picsum.photos/1920/1080"
+        src="https://picsum.photos/2000/1080"
         alt="Hero background"
         fill
         className="object-cover"
