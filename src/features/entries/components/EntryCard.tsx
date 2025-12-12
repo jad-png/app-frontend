@@ -38,50 +38,46 @@ const EntryCard: React.FC<EntryCardProps> = ({
     }
 
     return (
-        <div className="border-2 border-red-500 flex items-center justify-center">
-            <div className="border-2 border-yellow-500 w-full m-10 flex items-center justify-center">
-                <div
-                    className=" border-2 border-blue-500 relative w-[90%] h-[90%] m-4 aspect-video shadow-lg cursor-pointer transition-transform duration-300"
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                >
-                    {/* Layer 1: Static Thumbnail Image (Bottom Layer) */}
-                    <div className="absolute inset-0 z-0">
-                        <Image
-                            src={imageUrl}
-                            alt={title}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            priority={false}
-                        />
-                    </div>
+        // Cleaned Container: Removed debug borders & margins that squashed the card
+        <div 
+            className="group relative w-full aspect-video rounded-2xl overflow-hidden bg-gray-900 shadow-md cursor-pointer isolation-isolate"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
+            {/* Layer 1: Static Thumbnail Image (Bottom Layer) */}
+            <div className="absolute inset-0 z-0">
+                <Image
+                    src={imageUrl}
+                    alt={title}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority={false}
+                />
+            </div>
 
-                    {/* Layer 2: Video Player (Middle Layer) */}
-                    <video
-                        ref={videoRef}
-                        src={videoUrl}
-                        className={`absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"
-                            }`}
-                        muted
-                        loop
-                        playsInline
-                        preload="metadata"
-                    />
+            {/* Layer 2: Video Player (Middle Layer) */}
+            <video
+                ref={videoRef}
+                src={videoUrl}
+                className={`absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-300 ${isHovered ? "opacity-100" : "opacity-0"}`}
+                muted
+                loop
+                playsInline
+                preload="metadata"
+            />
 
-                    {/* Layer 3: Netflix-Style Gradient Overlay (Top Layer - Bottom Positioned) */}
-                    <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-20 pointer-events-none" />
+            {/* Layer 3: Netflix-Style Gradient Overlay (Top Layer - Bottom Positioned) */}
+            <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-20 pointer-events-none" />
 
-                    {/* Layer 4: Text Content (Topmost Layer) */}
-                    <div
-                        className={`absolute bottom-0 left-0 right-0 p-6 text-white z-30 transition-transform duration-300 ${isHovered ? "-translate-y-1" : "translate-y-0"
-                            }`}
-                    >
-                        <p className="text-sm text-gray-200 mb-2">{date}</p>
-                        <h3 className="text-lg font-bold leading-tight mb-1">{title}</h3>
-                        <p className="text-sm text-gray-200">{subtitle}</p>
-                    </div>
-                </div>
+            {/* Layer 4: Text Content (Topmost Layer) */}
+            <div className={`absolute bottom-0 left-0 right-0 p-5 text-white z-30 w-full`}>
+                 {/* Optional: Add Date Badge styling if needed */}
+                <span className="inline-block px-2 py-1 mb-2 text-xs font-medium bg-white/20 backdrop-blur-sm rounded-md border border-white/10">
+                    {date}
+                </span>
+                <h3 className="text-lg font-bold leading-tight mb-1 drop-shadow-md">{title}</h3>
+                <p className="text-sm text-gray-200 opacity-90 font-medium">{subtitle}</p>
             </div>
         </div>
     )
